@@ -52,6 +52,7 @@ public:
     
 public slots:    
 
+    void bt_select_font_clicked();
     void bt_apply_clicked();
     void update_stats();
     void iconActivated (QSystemTrayIcon::ActivationReason reason);

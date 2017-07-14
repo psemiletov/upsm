@@ -14,6 +14,8 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QFontDialog>
+#include <QFont>
 
 #include "mainwindow.h"
 
@@ -120,7 +122,11 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   
   main_widget.addTab (&editor, tr ("Stats"));
   
-  editor.setFont (QFont ("Serif", 24));
+//  editor.setFont (QFont ("Serif", 24));
+
+  editor.setFont (QFont (settings->value("font_name", "Serif").toString(), 
+                         settings->value("font_size", "24").toInt()));
+
   editor.setReadOnly (true);
   
   connect(&tray_icon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -149,8 +155,16 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   led_polltime->setText (settings->value ("polltime", "5000").toString());
   la_settings->addLayout (la_polltime);
 
+  QPushButton *bt_select_font = new QPushButton (tr ("Select font")); 
+  connect (bt_select_font, SIGNAL (clicked()),this, SLOT (bt_select_font_clicked()));
+  la_settings->addWidget (bt_select_font);
+
+  la_settings->addStretch (0);
+
   QPushButton *bt_saveapply = new QPushButton (tr ("Apply and save")); 
   connect (bt_saveapply, SIGNAL (clicked()),this, SLOT (bt_apply_clicked()));
+
+
   
   la_settings->addWidget (bt_saveapply);
 
@@ -285,4 +299,21 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 MainWindow::~MainWindow()
 {
   delete settings;  
+}
+
+
+void MainWindow::bt_select_font_clicked()
+{
+  bool ok;
+  QFont font = QFontDialog::getFont (&ok, QFont (settings->value("font_name", "Serif").toString(),
+                                                 settings->value("font_size", "24").toInt()), this);
+  if (ok) 
+     {
+      settings->setValue ("font_name", font.family());
+      settings->setValue ("font_size", font.pointSize());
+       
+      editor.setFont (QFont (settings->value("font_name", "Serif").toString(), 
+                             settings->value("font_size", "24").toInt()));
+     }  
+  
 }
