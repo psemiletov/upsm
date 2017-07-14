@@ -26,7 +26,7 @@ void MainWindow::show_at_center()
   int y = (desktop->height() - size().height()) / 2;
   y -= 50;
  
-  move ( x, y );
+  move (x, y);
 }
 
 
@@ -45,6 +45,7 @@ QHash <QString, QString> hash_load_keyval (const QString &data)
 
   return result;
 }
+
 
 QString hash_get_val (QHash<QString, QString> &h,
                       const QString &key,
@@ -74,6 +75,7 @@ QString qstring_load (const QString &fileName, const char *enc)
   return in.readAll();
 }
 
+
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
     
@@ -86,27 +88,23 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   qApp->installTranslator (&myappTranslator);
     
   QDir dr;
-  QString sfilename = dr.homePath() + "/.config/upsm.conf";
-  settings = new QSettings (sfilename, QSettings::IniFormat);
+  s_config_fname = dr.homePath() + "/.config/upsm.conf";
+  settings = new QSettings (s_config_fname, QSettings::IniFormat);
+
   command = settings->value ("command", "upsc serverups@localhost").toString();
-    
   polltime = settings->value ("polltime", "5000").toInt();
-  
   
 
   QPixmap pxm_red (64, 64);
   pxm_red.fill (Qt::red);
-  
   icon_red.addPixmap (pxm_red);
 
   QPixmap pxm_green (64, 64);
   pxm_green.fill (Qt::green);
-  
   icon_green.addPixmap (pxm_green);
 
   QPixmap pxm_yellow (64, 64);
   pxm_yellow.fill (Qt::yellow);
-  
   icon_yellow.addPixmap (pxm_yellow);
 
 
@@ -118,12 +116,9 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   resize (800, 400);
   show_at_center();
   
-  //setCentralWidget (&editor);
-  
   setCentralWidget (&main_widget);
   
   main_widget.addTab (&editor, tr ("Stats"));
-  
   
   editor.setFont (QFont ("Serif", 24));
   editor.setReadOnly (true);
@@ -131,8 +126,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   connect(&tray_icon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
   
-  
-  
+ 
   QWidget *settings_widget = new QWidget; 
   
   QVBoxLayout *la_settings = new QVBoxLayout; 
@@ -170,22 +164,17 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   main_widget.addTab (help_widget, tr ("Help"));
   
   
-   timer = new QTimer(this);
-   connect(timer, SIGNAL(timeout()), this, SLOT(update_stats()));
+  timer = new QTimer(this);
+  connect (timer, SIGNAL(timeout()), this, SLOT(update_stats()));
   
-   update_stats();
+  update_stats();
   
-   timer->start (polltime);
-   
-   //setVisible (false);
+  timer->start (polltime);
 }
 
 
 void MainWindow::bt_apply_clicked()
 {
-  QDir dr;
-  QString sfilename = dr.homePath() + "/.config/upsm.conf";
-
   settings->setValue ("command", led_command->text());
   settings->setValue ("polltime", led_polltime->text());
   
@@ -194,8 +183,6 @@ void MainWindow::bt_apply_clicked()
   
   timer->stop();
   timer->start (polltime);
-
-//  timer->setInterval (polltime);
 }
     
 
@@ -218,16 +205,12 @@ void MainWindow::update_stats()
   QString data = result.data();
     
   QHash <QString, QString> h = hash_load_keyval (data);
-
-  //qDebug() << hash_get_val (h,
-    //                  "driver.name",
-      //                "NOOO");
                       
   QString out;                      
+
   out.append (tr ("Input: ")); 
   out.append (hash_get_val (h, "input.voltage","NOOO"));
   out.append ("\n");
-                    
 
   out.append (tr ("Output: ")); 
   out.append (hash_get_val (h, "output.voltage","NOOO"));
@@ -247,43 +230,30 @@ void MainWindow::update_stats()
     
   if (status == "OL")
      {
-      //t = "Напряжение норма";
       t = tr ("voltage normal");
-      
       //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxInformation));
       tray_icon.setIcon (icon_green);
-      
-      }
+     }
       
      
   if (status == "OL TRIM")
      {
-//      t = "ИБП понижает напрягу";
       t = tr ("ups is trimming voltage");
-      
 //      tray_icon.setIcon (style.standardIcon(QStyle::SP_ArrowDown));
       tray_icon.setIcon (icon_yellow);
-
      } 
   
   if (status == "OB")
      {
-      //t = "Работа от батареи!";
       t = tr ("battery mode");
-      
       //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxCritical));
-       tray_icon.setIcon (icon_red);
-
-      
+      tray_icon.setIcon (icon_red);
      } 
   
   out.append (t);
   out.append ("\n");
   
-  
   editor.setPlainText (out);
-  
- 
 }
 
 
@@ -293,8 +263,6 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
          {
           case QSystemTrayIcon::Trigger:
           case QSystemTrayIcon::DoubleClick:
-          /*iconComboBox->setCurrentIndex((iconComboBox->currentIndex() + 1)
-                                      % iconComboBox->count());*/
                   
           if (! isVisible())        
              {     
@@ -308,13 +276,11 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
                             
           break;
     
-          case QSystemTrayIcon::MiddleClick:
-             //showMessage();
-             break;
           default:
                   ;
          }
 }
+
 
 MainWindow::~MainWindow()
 {

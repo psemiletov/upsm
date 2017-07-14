@@ -23,6 +23,8 @@ public:
 
     QSettings *settings;
     QString command;
+    QString s_config_fname;
+
     int polltime;
     
     QTimer *timer; 
@@ -51,9 +53,8 @@ public:
 public slots:    
 
     void bt_apply_clicked();
-    
     void update_stats();
-    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void iconActivated (QSystemTrayIcon::ActivationReason reason);
 };
 
 #endif // MAINWINDOW_H

@@ -5,11 +5,13 @@ Deps: Qt5
 EN: upsm
 
 upsm is public domain, Qt-based ups monitor (front-end for upsc from Network UPS Tools). It sits at the tray and polls nut server using upsc, so you need to set up NUT first (ups.conf and other stuff). From the Settings of upsm you can define the command line for upsc (i.e. "upsc serverups@localhost" for example) and polling time period, in millisecond.
+P.S. Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program.
 
 Peter Semiletov
 
 РУ:
 
-upsm это основанный на Qt монитор ИБП (фронт-энд к утилите upsc из состава Network UPS Tools). Он сидит в трее и запрашивает показания напряжения от nut-сервера используя upsc, поэтому вам нужно сначала настроить NUT (ups.conf и прочее). В Настройках upsm нужно задать команду вызова upsc, например "upsc serverups@localhost", и периодичность опроса сервера, в миллисекундах.
+upsm это основанный на Qt монитор ИБП (фронт-энд к утилите upsc из состава Network UPS Tools). Он сидит в области уведомлений и запрашивает показания напряжения от nut-сервера используя upsc, поэтому вам нужно сначала настроить NUT (ups.conf и прочее). В Настройках upsm нужно задать команду вызова upsc, например "upsc serverups@localhost", и периодичность опроса сервера, в миллисекундах.
+П.С. Кнопка "закрыть" завершает работу программы, а "свернуть" - сворачивает в область уведомлений.
 
 Петр Семилетов
