@@ -1,4 +1,6 @@
-#include "mainwindow.h"
+/*
+This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
+*/
 
 #include <QProcess>
 #include <QDebug>
@@ -13,22 +15,15 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "mainwindow.h"
+
 
 void MainWindow::show_at_center()
 {
   QDesktopWidget *desktop = QApplication::desktop();
-
-  int screenWidth, width; 
-  int screenHeight, height;
   
-  screenWidth = desktop->width(); // get width of screen
-  screenHeight = desktop->height(); // get height of screen
- 
-  width = size().width(); 
-  height = size().height();
- 
-  int x  = (screenWidth - width) / 2;
-  int y = (screenHeight - height) / 2;
+  int x  = (desktop->width() - size().width()) / 2;
+  int y = (desktop->height() - size().height()) / 2;
   y -= 50;
  
   move ( x, y );
