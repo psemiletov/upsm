@@ -61,6 +61,19 @@ QString hash_get_val (QHash<QString, QString> &h,
 }
 
 
+QString qstring_load (const QString &fileName, const char *enc)
+{
+  QFile file (fileName);
+
+  if (! file.open (QFile::ReadOnly | QFile::Text))
+     return QString();
+
+  QTextStream in(&file);
+  in.setCodec (enc);
+
+  return in.readAll();
+}
+
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
     
@@ -149,6 +162,12 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   
   main_widget.addTab (settings_widget, tr ("Settings"));
+  
+  QPlainTextEdit *help_widget = new QPlainTextEdit;
+  help_widget->setPlainText (qstring_load (":README", "UTF-8"));
+  
+  
+  main_widget.addTab (help_widget, tr ("Help"));
   
   
    timer = new QTimer(this);

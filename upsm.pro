@@ -31,4 +31,5 @@ SOURCES += main.cpp\
         mainwindow.cpp
 
 HEADERS  += mainwindow.h
-DISTFILES += translations/*
+DISTFILES += translations/* \
+             README
