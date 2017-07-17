@@ -16,6 +16,7 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 #include <QPushButton>
 #include <QFontDialog>
 #include <QFont>
+#include <QDateTime>
 
 #include "mainwindow.h"
 
@@ -95,6 +96,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   command = settings->value ("command", "upsc serverups@localhost").toString();
   polltime = settings->value ("polltime", "5000").toInt();
+  logsize = settings->value ("logsize", "1024").toInt();
   
 
   QPixmap pxm_red (64, 64);
@@ -131,6 +133,10 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   
   connect(&tray_icon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+
+  main_widget.addTab (&log, tr ("Log"));
+  connect (&main_widget, SIGNAL(currentChanged(int)), this, SLOT(pageChanged(int)));
+
   
  
   QWidget *settings_widget = new QWidget; 
@@ -154,6 +160,15 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   la_polltime->addWidget (led_polltime);  
   led_polltime->setText (settings->value ("polltime", "5000").toString());
   la_settings->addLayout (la_polltime);
+
+  QHBoxLayout *la_logsize = new QHBoxLayout; 
+  QLabel *l_logsize = new QLabel (tr ("Log size, in records"));
+  led_logsize = new QLineEdit;
+  la_logsize->addWidget (l_logsize);  
+  la_logsize->addWidget (led_logsize);  
+  led_logsize->setText (settings->value ("logsize", "1024").toString());
+  la_settings->addLayout (la_logsize);
+
 
   QPushButton *bt_select_font = new QPushButton (tr ("Select font")); 
   connect (bt_select_font, SIGNAL (clicked()),this, SLOT (bt_select_font_clicked()));
@@ -191,9 +206,11 @@ void MainWindow::bt_apply_clicked()
 {
   settings->setValue ("command", led_command->text());
   settings->setValue ("polltime", led_polltime->text());
+  settings->setValue ("logsize", led_logsize->text());
   
   command = settings->value ("command", "no").toString();
   polltime = settings->value ("polltime", "5000").toInt();
+  logsize = settings->value ("logsize", "1024").toInt();
   
   timer->stop();
   timer->start (polltime);
@@ -267,6 +284,15 @@ void MainWindow::update_stats()
   out.append ("\n");
   
   editor.setPlainText (out);
+  
+  if (slst_log.size() > logsize)
+     slst_log.removeLast();
+  
+  QDateTime dt (QDateTime::currentDateTime());
+       
+  slst_log.prepend (out);   
+  
+  slst_log.prepend ("---------" + dt.toString ("hh:mm:ss") + "---------");
 }
 
 
@@ -295,6 +321,13 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 }
 
 
+void MainWindow::closeEvent (QCloseEvent *event)
+{
+  log.disconnect();
+  event->accept();
+}    
+
+
 MainWindow::~MainWindow()
 {
   delete settings;  
@@ -315,4 +348,12 @@ void MainWindow::bt_select_font_clicked()
                              settings->value("font_size", "24").toInt()));
      }  
   
+}
+
+
+void MainWindow::pageChanged (int index)
+{
+  if (main_widget.count() == 4)
+     if (index == 1)
+        log.setPlainText (slst_log.join ("\n"));
 }

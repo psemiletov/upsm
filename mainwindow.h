@@ -13,7 +13,7 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QTimer>
-
+#include <QStringList>
 
 class MainWindow: public QMainWindow
 {
@@ -21,11 +21,14 @@ class MainWindow: public QMainWindow
     
 public:
 
+    QStringList slst_log;
+
     QSettings *settings;
     QString command;
     QString s_config_fname;
 
     int polltime;
+    int logsize;
     
     QTimer *timer; 
 
@@ -35,6 +38,8 @@ public:
     QTabWidget main_widget;
 
     QPlainTextEdit editor;
+    QPlainTextEdit log;
+    
     QSystemTrayIcon tray_icon;
     QCommonStyle style;
   
@@ -44,18 +49,24 @@ public:
   
     QLineEdit *led_polltime; 
     QLineEdit *led_command;
+    QLineEdit *led_logsize;
  
-    MainWindow(QWidget *parent = 0);
+    MainWindow (QWidget *parent = 0);
     ~MainWindow();
     
     void show_at_center();
     
 public slots:    
 
+    void pageChanged (int index);
     void bt_select_font_clicked();
     void bt_apply_clicked();
     void update_stats();
     void iconActivated (QSystemTrayIcon::ActivationReason reason);
+    
+protected:
+
+     void closeEvent (QCloseEvent *event);    
 };
 
 #endif // MAINWINDOW_H
