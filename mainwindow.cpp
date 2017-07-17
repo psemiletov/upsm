@@ -248,15 +248,14 @@ void MainWindow::update_stats()
       //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxInformation));
       tray_icon.setIcon (icon_green);
      }
-      
-     
+  else    
   if (status == "OL TRIM")
      {
       t = tr ("ups is trimming voltage");
 //      tray_icon.setIcon (style.standardIcon(QStyle::SP_ArrowDown));
       tray_icon.setIcon (icon_yellow);
      } 
-  
+  else
   if (status == "OB")
      {
       t = tr ("battery mode");
