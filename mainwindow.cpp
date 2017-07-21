@@ -212,6 +212,8 @@ void MainWindow::bt_apply_clicked()
   polltime = settings->value ("polltime", "5000").toInt();
   logsize = settings->value ("logsize", "1024").toInt();
   
+  //if (slst_log.size()
+  
   timer->stop();
   timer->start (polltime);
 }

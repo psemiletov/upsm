@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=upsm
+Terminal=false
+Type=Application
+Icon=upsm-icon
+Categories=Application;Utility;
+StartupNotify=false
+MimeType=text/plain;
+NoDisplay=false
+Version=1.1
+Keywords=ups monitor;
+Comment=Qt-based ups monitor front-end
+Exec=upsm
