@@ -41,6 +41,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 DISTFILES += translations/* \
              desktop/* \     
+             icons/* \
              README \
              ChangeLog
              
