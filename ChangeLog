@@ -1,3 +1,8 @@
+1.2.0
++ Hide from taskbar option
++ new tray icon (represents INPUT over the OUTPUT values)
+  
+
 1.1.0
 + desktop integration
 + make install works
