@@ -17,6 +17,7 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 #include <QFontDialog>
 #include <QFont>
 #include <QDateTime>
+#include <QPainter>
 
 #include "mainwindow.h"
 
@@ -81,6 +82,7 @@ QString qstring_load (const QString &fileName, const char *enc)
 
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
+  
     
   qtTranslator.load (QString ("qt_%1").arg (QLocale::system().name()),
                      QLibraryInfo::location (QLibraryInfo::TranslationsPath));
@@ -98,6 +100,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   polltime = settings->value ("polltime", "5000").toInt();
   logsize = settings->value ("logsize", "1024").toInt();
   
+  paint_rect = new QImage (64, 64, QImage::Format_ARGB32);
 
   QPixmap pxm_red (64, 64);
   pxm_red.fill (Qt::red);
@@ -169,6 +172,13 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   led_logsize->setText (settings->value ("logsize", "1024").toString());
   la_settings->addLayout (la_logsize);
 
+  cb_hide_from_taskbar = new QCheckBox (tr ("Hide from taskbar"));
+  cb_hide_from_taskbar->setTristate (false);
+  if (settings->value ("hide_from_taskbar", "0").toBool())
+     cb_hide_from_taskbar->setChecked (true);
+
+  la_settings->addWidget (cb_hide_from_taskbar);
+
 
   QPushButton *bt_select_font = new QPushButton (tr ("Select font")); 
   connect (bt_select_font, SIGNAL (clicked()),this, SLOT (bt_select_font_clicked()));
@@ -199,6 +209,16 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   update_stats();
   
   timer->start (polltime);
+  
+   
+  if (settings->value ("hide_from_taskbar", "0").toBool())
+      {
+       setWindowFlags (Qt::Tool);  
+       setAttribute (Qt::WA_QuitOnClose);
+      } 
+  else
+      setWindowFlags (Qt::Window);  
+    
 }
 
 
@@ -211,6 +231,19 @@ void MainWindow::bt_apply_clicked()
   command = settings->value ("command", "no").toString();
   polltime = settings->value ("polltime", "5000").toInt();
   logsize = settings->value ("logsize", "1024").toInt();
+
+  settings->setValue ("hide_from_taskbar", cb_hide_from_taskbar->isChecked());
+
+  
+  if (settings->value ("hide_from_taskbar", "0").toBool())
+      {
+       setWindowFlags (Qt::Tool);  
+       setAttribute (Qt::WA_QuitOnClose);
+      } 
+  else
+      setWindowFlags (Qt::Window);  
+    
+
   
   //if (slst_log.size()
   
@@ -233,7 +266,8 @@ void MainWindow::update_stats()
 
   if (! procmon.waitForFinished())
        return;
-
+  
+  
   QByteArray result = procmon.readAll();
   QString data = result.data();
     
@@ -241,12 +275,17 @@ void MainWindow::update_stats()
                       
   QString out;                      
 
+  QString input_v = hash_get_val (h, "input.voltage","NOOO");
+  QString output_v = hash_get_val (h, "output.voltage","NOOO");
+
   out.append (tr ("Input: ")); 
-  out.append (hash_get_val (h, "input.voltage","NOOO"));
+  out.append (input_v);
   out.append ("\n");
 
+  
+   
   out.append (tr ("Output: ")); 
-  out.append (hash_get_val (h, "output.voltage","NOOO"));
+  out.append (output_v);
   out.append ("\n");
   
   out.append (tr ("Load: ")); 
@@ -259,27 +298,35 @@ void MainWindow::update_stats()
   //"OL" "OL TRIM"
   //OB
   
+
+  
   QString t;
     
   if (status == "OL")
      {
       t = tr ("voltage normal");
+      paint_rect->fill (Qt::darkGreen);
+
       //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxInformation));
-      tray_icon.setIcon (icon_green);
+      //tray_icon.setIcon (icon_green);
+//      QPixmap pm = QPixmap::fromImage (*paint_rect);
+  //    tray_icon.setIcon (QIcon (pm));
      }
   else    
   if (status == "OL TRIM")
      {
       t = tr ("ups is trimming voltage");
-//      tray_icon.setIcon (style.standardIcon(QStyle::SP_ArrowDown));
-      tray_icon.setIcon (icon_yellow);
+      paint_rect->fill (Qt::darkRed);
+
+  //    tray_icon.setIcon (icon_yellow);
      } 
   else
   if (status == "OB")
      {
       t = tr ("battery mode");
-      //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxCritical));
-      tray_icon.setIcon (icon_red);
+      paint_rect->fill (Qt::red);
+
+//      tray_icon.setIcon (icon_red);
      } 
   
   out.append (t);
@@ -295,6 +342,27 @@ void MainWindow::update_stats()
   slst_log.prepend (out);   
   
   slst_log.prepend ("---------" + dt.toString ("hh:mm:ss") + "---------");
+  
+  
+  //paint_rect->fill (Qt::darkGreen);
+
+  QPainter pnt (paint_rect);
+  QFont fnt ("Sans");
+  fnt.setPixelSize (26);  
+     
+  pnt.setFont (fnt);
+
+  pnt.setPen (Qt::cyan);
+
+  pnt.drawText(QRect (1, 1, 64, 32), Qt::AlignLeft, input_v.left (input_v.indexOf(".")));
+
+  pnt.setPen (Qt::white);
+
+  pnt.drawText(QRect (1, 32, 64, 32), Qt::AlignLeft, output_v.left (input_v.indexOf(".")));
+  
+  QPixmap pm = QPixmap::fromImage (*paint_rect);
+  tray_icon.setIcon (QIcon (pm));
+
 }
 
 
@@ -332,6 +400,7 @@ void MainWindow::closeEvent (QCloseEvent *event)
 
 MainWindow::~MainWindow()
 {
+  delete paint_rect;
   delete settings;  
 }
 

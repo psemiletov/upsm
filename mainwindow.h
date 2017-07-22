@@ -14,12 +14,17 @@
 #include <QLineEdit>
 #include <QTimer>
 #include <QStringList>
+#include <QImage>
+#include <QCheckBox>
+
 
 class MainWindow: public QMainWindow
 {
     Q_OBJECT
     
 public:
+
+    QImage *paint_rect;
 
     QStringList slst_log;
 
@@ -36,6 +41,8 @@ public:
     QTranslator qtTranslator;
 
     QTabWidget main_widget;
+
+    QCheckBox *cb_hide_from_taskbar;
 
     QPlainTextEdit editor;
     QPlainTextEdit log;
