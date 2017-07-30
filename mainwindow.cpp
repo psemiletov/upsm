@@ -22,15 +22,12 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 #include "mainwindow.h"
 
 
-void MainWindow::show_at_center()
+bool file_exists (const QString &fileName)
 {
-  QDesktopWidget *desktop = QApplication::desktop();
-  
-  int x  = (desktop->width() - size().width()) / 2;
-  int y = (desktop->height() - size().height()) / 2;
-  y -= 50;
- 
-  move (x, y);
+  if (fileName.isEmpty())
+     return false;
+
+  return QFile::exists (fileName);
 }
 
 
@@ -80,10 +77,20 @@ QString qstring_load (const QString &fileName, const char *enc)
 }
 
 
+void MainWindow::show_at_center()
+{
+  QDesktopWidget *desktop = QApplication::desktop();
+  
+  int x  = (desktop->width() - size().width()) / 2;
+  int y = (desktop->height() - size().height()) / 2;
+  y -= 50;
+ 
+  move (x, y);
+}
+
+
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
-  
-    
   qtTranslator.load (QString ("qt_%1").arg (QLocale::system().name()),
                      QLibraryInfo::location (QLibraryInfo::TranslationsPath));
        
@@ -175,7 +182,10 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   cb_hide_from_taskbar = new QCheckBox (tr ("Hide from taskbar"));
   cb_hide_from_taskbar->setTristate (false);
   if (settings->value ("hide_from_taskbar", "0").toBool())
-     cb_hide_from_taskbar->setChecked (true);
+     {
+      cb_hide_from_taskbar->setChecked (true);
+      hide();
+     } 
 
   la_settings->addWidget (cb_hide_from_taskbar);
 
@@ -197,7 +207,33 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   main_widget.addTab (settings_widget, tr ("Settings"));
   
   QPlainTextEdit *help_widget = new QPlainTextEdit;
-  help_widget->setPlainText (qstring_load (":README", "UTF-8"));
+  
+  
+  QString loc = QLocale::system().name().left (2);
+/*
+  if (settings->value ("override_locale", 0).toBool())
+     {
+      QString ts = settings->value ("override_locale_val", "en").toString();
+      if (ts.length() != 2)
+          ts = "en";
+      loc = ts;
+     }
+*/
+  QString filename (":/manuals/");
+  filename.append (loc);
+
+  //filename.append (loc).append (".html");
+  //filename.append (loc).append (".html");
+  
+  if (! file_exists (filename))
+      filename = ":/manuals/en";
+
+
+  
+  help_widget->setPlainText (qstring_load (filename, "UTF-8"));
+  
+  
+  //help_widget->setPlainText (qstring_load (":README", "UTF-8"));
   
   
   main_widget.addTab (help_widget, tr ("Help"));
@@ -242,10 +278,6 @@ void MainWindow::bt_apply_clicked()
       } 
   else
       setWindowFlags (Qt::Window);  
-    
-
-  
-  //if (slst_log.size()
   
   timer->stop();
   timer->start (polltime);
@@ -418,7 +450,6 @@ void MainWindow::bt_select_font_clicked()
       editor.setFont (QFont (settings->value("font_name", "Serif").toString(), 
                              settings->value("font_size", "24").toInt()));
      }  
-  
 }
 
 

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-VERSION=1.2.0
+VERSION=1.3.0
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -40,8 +40,9 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h
 DISTFILES += translations/* \
-             desktop/* \     
+             desktop/* \
              icons/* \
+             manuals/* \
              README \
              ChangeLog
              

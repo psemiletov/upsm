@@ -1,0 +1,46 @@
+#upsm
+https://github.com/psemiletov/upsm
+
+   MANUAL
+
+  upsm is public domain, Qt-based ups monitor (front-end for upsc from Network UPS Tools). It sits at the tray and polls nut server using upsc, so you need to set up NUT first (ups.conf and other stuff). From the Settings of upsm you can define the command line for upsc (i.e. "upsc myups" for example) and polling time period, in millisecond.
+   Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program, if the option "Hide from taskbar" is turned off. 
+   And now how to set up NUT server.
+
+1. Execute "lsusb" command to see the vendor id of your UPS, for example:
+
+Bus 003 Device 004: ID 0d9f:0004 Powercom Co., Ltd
+vendor id here is = 0d9f
+and the bus is = 003
+
+2. Copy, if not exists, file "some_number-nut-usbups.rules" from /lib/udev/rules.d to /etc/udev/rules.d.
+
+3. Edit file /etc/nut/ups.conf, and put there to the end something like this:
+
+[myups]
+    driver = usbhid-ups
+    port = auto
+    desc = "My ups"
+    vendorid = 0d9f
+    pollfreq = 30
+
+   So to the vendorid must be the vendorid that we know from lsusb. 
+   pollfreq - the device polling frequency, in milliseconds.
+   The bus is better to leave undefined, because the bus number can be changed after reboot,
+
+4. Run the driver:
+
+upsdrvctl start
+
+5. Run the server:
+
+upsd
+
+6. Read the data from UPS:
+
+upsc myups
+
+7. Put this command to the "Command" parameter at upsm "Settings" panel.
+
+
+Peter Semiletov <peter.semiletov@gmail.com>

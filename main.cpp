@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
    MainWindow w;
    w.show();
    w.setAttribute (Qt::WA_QuitOnClose);
-   w.hide();
+   a.connect( &a, SIGNAL( lastWindowClosed() ), &a, SLOT( quit() ) );
     
    return a.exec();
 }

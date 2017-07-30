@@ -3,6 +3,8 @@
 
     <file>translations/upsm_ru.qm</file>
     <file>README</file>
+    <file>manuals/ru</file>
+    <file>manuals/en</file>
 
 </qresource>
 </RCC>
