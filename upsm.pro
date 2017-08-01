@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-VERSION=1.3.0
+VERSION=1.3.1
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -39,11 +39,12 @@ SOURCES += main.cpp\
            mainwindow.cpp
 
 HEADERS  += mainwindow.h
+
 DISTFILES += translations/* \
              desktop/* \
              icons/* \
              manuals/* \
              README \
              ChangeLog
-             
-INSTALLS += target desktop icon128             
+
+INSTALLS += target desktop icon128

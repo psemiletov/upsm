@@ -43,6 +43,7 @@ public:
     QTabWidget main_widget;
 
     QCheckBox *cb_hide_from_taskbar;
+    QCheckBox *cb_run_minimized;
 
     QPlainTextEdit editor;
     QPlainTextEdit log;

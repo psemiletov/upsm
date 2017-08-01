@@ -184,10 +184,20 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   if (settings->value ("hide_from_taskbar", "0").toBool())
      {
       cb_hide_from_taskbar->setChecked (true);
-      hide();
      } 
 
   la_settings->addWidget (cb_hide_from_taskbar);
+
+  cb_run_minimized = new QCheckBox (tr ("Run minimized"));
+  cb_run_minimized->setTristate (false);
+  if (settings->value ("run_minimized", "0").toBool())
+     {
+      cb_run_minimized->setChecked (true);
+      hide();
+     } 
+      
+
+  la_settings->addWidget (cb_run_minimized);
 
 
   QPushButton *bt_select_font = new QPushButton (tr ("Select font")); 
@@ -268,8 +278,8 @@ void MainWindow::bt_apply_clicked()
   polltime = settings->value ("polltime", "5000").toInt();
   logsize = settings->value ("logsize", "1024").toInt();
 
+  settings->setValue ("run_minimized", cb_run_minimized->isChecked());
   settings->setValue ("hide_from_taskbar", cb_hide_from_taskbar->isChecked());
-
   
   if (settings->value ("hide_from_taskbar", "0").toBool())
       {
