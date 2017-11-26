@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-VERSION=1.3.1
+VERSION=1.3.2
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -24,8 +24,7 @@ desktop.path=$$PREFIX/share/applications
 desktop.files=desktop/upsm.desktop
 
 icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
-icon128.files += icons/upsm-icon.png
-
+icon128.files += icons/upsm.png
 
 
 #TARGET = upsm

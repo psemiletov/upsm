@@ -208,9 +208,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   QPushButton *bt_saveapply = new QPushButton (tr ("Apply and save")); 
   connect (bt_saveapply, SIGNAL (clicked()),this, SLOT (bt_apply_clicked()));
-
-
-  
   la_settings->addWidget (bt_saveapply);
 
   
@@ -237,14 +234,8 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   
   if (! file_exists (filename))
       filename = ":/manuals/en";
-
-
   
   help_widget->setPlainText (qstring_load (filename, "UTF-8"));
-  
-  
-  //help_widget->setPlainText (qstring_load (":README", "UTF-8"));
-  
   
   main_widget.addTab (help_widget, tr ("Help"));
   
@@ -264,7 +255,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
       } 
   else
       setWindowFlags (Qt::Window);  
-    
 }
 
 
@@ -340,8 +330,6 @@ void MainWindow::update_stats()
   //"OL" "OL TRIM"
   //OB
   
-
-  
   QString t;
     
   if (status == "OL")
@@ -404,7 +392,6 @@ void MainWindow::update_stats()
   
   QPixmap pm = QPixmap::fromImage (*paint_rect);
   tray_icon.setIcon (QIcon (pm));
-
 }
 
 
