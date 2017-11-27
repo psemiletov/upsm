@@ -12,7 +12,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 RESOURCES += upsm.qrc
 
 
-
 isEmpty(PREFIX) {
 PREFIX = /usr/local
 }
@@ -27,7 +26,6 @@ icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps/
 icon128.files += icons/upsm.png
 
 
-#TARGET = upsm
 TEMPLATE = app
 TRANSLATIONS = ./translations/upsm_ru.ts
 
