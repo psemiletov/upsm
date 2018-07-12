@@ -11,6 +11,14 @@ qmake
 make
 make install
 
+or:
+
+mkdir b
+cd b
+cmake ..
+make
+make install
+
 P.S. Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program.
 
 Peter Semiletov
@@ -23,6 +31,15 @@ Peter Semiletov
 qmake
 make
 make install
+
+либо:
+
+mkdir b
+cd b
+cmake ..
+make
+make install
+
 
 П.С. Кнопка "закрыть" завершает работу программы, а "свернуть" - сворачивает в область уведомлений.
 

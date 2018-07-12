@@ -70,7 +70,7 @@ QString qstring_load (const QString &fileName, const char *enc)
   if (! file.open (QFile::ReadOnly | QFile::Text))
      return QString();
 
-  QTextStream in(&file);
+  QTextStream in (&file);
   in.setCodec (enc);
 
   return in.readAll();
@@ -81,7 +81,7 @@ void MainWindow::show_at_center()
 {
   QDesktopWidget *desktop = QApplication::desktop();
   
-  int x  = (desktop->width() - size().width()) / 2;
+  int x = (desktop->width() - size().width()) / 2;
   int y = (desktop->height() - size().height()) / 2;
   y -= 50;
  
@@ -108,7 +108,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   logsize = settings->value ("logsize", "1024").toInt();
   
   paint_rect = new QImage (64, 64, QImage::Format_ARGB32);
-
+/*
   QPixmap pxm_red (64, 64);
   pxm_red.fill (Qt::red);
   icon_red.addPixmap (pxm_red);
@@ -120,11 +120,11 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   QPixmap pxm_yellow (64, 64);
   pxm_yellow.fill (Qt::yellow);
   icon_yellow.addPixmap (pxm_yellow);
-
+*/
+  //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxQuestion));
+//  tray_icon.setIcon (icon_green);
 
   tray_icon.setVisible (true);
-  //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxQuestion));
-  tray_icon.setIcon (icon_green);
 
 
   resize (800, 400);
@@ -134,8 +134,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   
   main_widget.addTab (&editor, tr ("Stats"));
   
-//  editor.setFont (QFont ("Serif", 24));
-
   editor.setFont (QFont (settings->value("font_name", "Serif").toString(), 
                          settings->value("font_size", "24").toInt()));
 
@@ -181,22 +179,21 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   cb_hide_from_taskbar = new QCheckBox (tr ("Hide from taskbar"));
   cb_hide_from_taskbar->setTristate (false);
+
   if (settings->value ("hide_from_taskbar", "0").toBool())
-     {
       cb_hide_from_taskbar->setChecked (true);
-     } 
 
   la_settings->addWidget (cb_hide_from_taskbar);
 
   cb_run_minimized = new QCheckBox (tr ("Run minimized"));
   cb_run_minimized->setTristate (false);
+
   if (settings->value ("run_minimized", "0").toBool())
      {
       cb_run_minimized->setChecked (true);
       hide();
      } 
       
-
   la_settings->addWidget (cb_run_minimized);
 
 
@@ -217,20 +214,9 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   
   
   QString loc = QLocale::system().name().left (2);
-/*
-  if (settings->value ("override_locale", 0).toBool())
-     {
-      QString ts = settings->value ("override_locale_val", "en").toString();
-      if (ts.length() != 2)
-          ts = "en";
-      loc = ts;
-     }
-*/
+
   QString filename (":/manuals/");
   filename.append (loc);
-
-  //filename.append (loc).append (".html");
-  //filename.append (loc).append (".html");
   
   if (! file_exists (filename))
       filename = ":/manuals/en";
@@ -246,7 +232,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   update_stats();
   
   timer->start (polltime);
-  
    
   if (settings->value ("hide_from_taskbar", "0").toBool())
       {
@@ -286,18 +271,17 @@ void MainWindow::bt_apply_clicked()
 
 void MainWindow::update_stats()
 {
-  if (command.isNull() || command.isEmpty())
+  if (command.isEmpty())
      return;
 
   QProcess procmon;
-  //procmon.start ("upsc serverups@localhost");
   procmon.start (command);
     
   if (! procmon.waitForStarted())
-        return;
+      return;
 
   if (! procmon.waitForFinished())
-       return;
+     return;
   
   
   QByteArray result = procmon.readAll();
@@ -314,8 +298,6 @@ void MainWindow::update_stats()
   out.append (input_v);
   out.append ("\n");
 
-  
-   
   out.append (tr ("Output: ")); 
   out.append (output_v);
   out.append ("\n");
@@ -323,12 +305,10 @@ void MainWindow::update_stats()
   out.append (tr ("Load: ")); 
   out.append ( hash_get_val (h, "ups.load","NOOO"));
   out.append ("\n");
-  
-  
+    
   QString status = hash_get_val (h, "ups.status","NOOO").trimmed();
   
-  //"OL" "OL TRIM"
-  //OB
+  //"OL" "OL TRIM" "OB"
   
   QString t;
     
@@ -336,7 +316,6 @@ void MainWindow::update_stats()
      {
       t = tr ("voltage normal");
       paint_rect->fill (Qt::darkGreen);
-
       //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxInformation));
       //tray_icon.setIcon (icon_green);
 //      QPixmap pm = QPixmap::fromImage (*paint_rect);
@@ -347,7 +326,6 @@ void MainWindow::update_stats()
      {
       t = tr ("ups is trimming voltage");
       paint_rect->fill (Qt::darkRed);
-
   //    tray_icon.setIcon (icon_yellow);
      } 
   else
@@ -355,7 +333,6 @@ void MainWindow::update_stats()
      {
       t = tr ("battery mode");
       paint_rect->fill (Qt::red);
-
 //      tray_icon.setIcon (icon_red);
      } 
   
@@ -372,23 +349,17 @@ void MainWindow::update_stats()
   slst_log.prepend (out);   
   
   slst_log.prepend ("---------" + dt.toString ("hh:mm:ss") + "---------");
-  
-  
-  //paint_rect->fill (Qt::darkGreen);
 
   QPainter pnt (paint_rect);
   QFont fnt ("Sans");
   fnt.setPixelSize (26);  
      
   pnt.setFont (fnt);
-
   pnt.setPen (Qt::cyan);
-
-  pnt.drawText(QRect (1, 1, 64, 32), Qt::AlignLeft, input_v.left (input_v.indexOf(".")));
+  pnt.drawText(QRect (1, 1, 64, 32), Qt::AlignLeft, input_v.left (input_v.indexOf (".")));
 
   pnt.setPen (Qt::white);
-
-  pnt.drawText(QRect (1, 32, 64, 32), Qt::AlignLeft, output_v.left (input_v.indexOf(".")));
+  pnt.drawText(QRect (1, 32, 64, 32), Qt::AlignLeft, output_v.left (input_v.indexOf (".")));
   
   QPixmap pm = QPixmap::fromImage (*paint_rect);
   tray_icon.setIcon (QIcon (pm));
@@ -400,7 +371,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
   switch (reason) 
          {
           case QSystemTrayIcon::Trigger:
-          case QSystemTrayIcon::DoubleClick:
+         // case QSystemTrayIcon::DoubleClick:
                   
           if (! isVisible())        
              {     

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-VERSION=1.3.3
+VERSION=1.3.4
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -42,6 +42,7 @@ DISTFILES += translations/* \
              icons/* \
              manuals/* \
              README \
-             ChangeLog
+             ChangeLog \
+             CMakeLists.txt
 
 INSTALLS += target desktop icon128
