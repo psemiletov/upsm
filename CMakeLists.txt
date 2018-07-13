@@ -56,5 +56,5 @@ add_executable(${PROJECT} ${upsm_SRCS} ${QT_RESOURCES})
 target_link_libraries(${PROJECT} Qt5::Widgets Qt5::Core)
 
 install (TARGETS ${PROJECT} DESTINATION bin)
-install (FILES ${upsm_ICONS} DESTINATION share/icons/hicolor/128x128/apps)
+install (FILES ${upsm_ICONS} DESTINATION share/icons/hicolor/scalable/apps)
 install (FILES ${upsm_DESKTOP} DESTINATION share/applications)
