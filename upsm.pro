@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 
-VERSION=1.3.4
-QT       += core gui
+VERSION=2.0.0
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +30,6 @@ TEMPLATE = app
 TRANSLATIONS = ./translations/upsm_ru.ts
 
 DEFINES += QT_DEPRECATED_WARNINGS
-
 
 SOURCES += main.cpp\
            mainwindow.cpp

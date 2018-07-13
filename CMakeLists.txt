@@ -10,7 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 set(PROJECT "upsm")
-project ($PROJECT VERSION 1.3.5)
+project ($PROJECT VERSION 2.0.0)
 
 #set (upsm_VERSION_MAJOR 1)
 #set (upsm_VERSION_MINOR 3)
@@ -50,7 +50,7 @@ set(upsm_DESKTOP
 
 
 add_custom_target(dist
-COMMAND git archive --prefix=${PROJECT}-1.2.3/ master | bzip2 >${PROJECT}-1.2.3.tar.bz2
+COMMAND git archive --prefix=${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}/ master | bzip2 >${PROJECT}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}.tar.bz2
 WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 

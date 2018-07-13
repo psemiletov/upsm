@@ -108,21 +108,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   logsize = settings->value ("logsize", "1024").toInt();
   
   paint_rect = new QImage (64, 64, QImage::Format_ARGB32);
-/*
-  QPixmap pxm_red (64, 64);
-  pxm_red.fill (Qt::red);
-  icon_red.addPixmap (pxm_red);
-
-  QPixmap pxm_green (64, 64);
-  pxm_green.fill (Qt::green);
-  icon_green.addPixmap (pxm_green);
-
-  QPixmap pxm_yellow (64, 64);
-  pxm_yellow.fill (Qt::yellow);
-  icon_yellow.addPixmap (pxm_yellow);
-*/
-  //tray_icon.setIcon (style.standardIcon(QStyle::SP_MessageBoxQuestion));
-//  tray_icon.setIcon (icon_green);
 
   tray_icon.setVisible (true);
 
