@@ -1,5 +1,5 @@
 2.1.0
-+ meson support
++ meson/ninja support
 
 2.0.0
 + cmake support, code cleanup

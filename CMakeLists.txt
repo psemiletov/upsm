@@ -5,7 +5,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
 set(PROJECT "upsm")
-project ($PROJECT VERSION 2.1.0)
+project ($PROJECT VERSION 2.1.1)
 
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

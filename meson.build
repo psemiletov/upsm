@@ -1,6 +1,6 @@
 project('upsm', 'cpp', 
          default_options : ['cpp_std=c++11'],
-         version : '2.1.0',
+         version : '2.1.1',
          license : 'GPLv3')
 
 
@@ -27,6 +27,6 @@ install_data(['icons/upsm.png'],
 install_data(['icons/upsm.svg'],
              install_dir : 'share/icons/hicolor/scalable/apps')
 
-install_data(['icons/upsm.svg'],
+install_data(['icons/upsm.desktop'],
              install_dir : 'share/applications')
              
