@@ -5,10 +5,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
 set(PROJECT "upsm")
-project ($PROJECT VERSION 2.0.1)
-
-#set (upsm_VERSION_MAJOR 1)
-#set (upsm_VERSION_MINOR 3)
+project ($PROJECT VERSION 2.1.0)
 
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -26,7 +23,7 @@ endif()
 
 qt5_add_resources(QT_RESOURCES upsm.qrc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -fuse-ld=gold")
 
 # Populate a CMake variable with the sources
 set(upsm_SRCS

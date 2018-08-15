@@ -1,11 +1,12 @@
-project('upsm', 'cpp',   default_options : ['cpp_std=c++11'])
+project('upsm', 'cpp', 
+         default_options : ['cpp_std=c++11'],
+         version : '2.1.0',
+         license : 'GPLv3')
 
-
-#qt5_mod = import('qt5')
-#qt5widgets = dependency('qt5', modules : 'Widgets')
 
 qt5_dep = dependency('qt5', modules : ['Core', 'Gui', 'Widgets']) 
 qt5 = import('qt5') 
+
 
 processed = qt5.preprocess(
   moc_headers : 'mainwindow.h',   # Only headers that need moc should be put here

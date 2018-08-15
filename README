@@ -21,6 +21,14 @@ make install
 
 or
 
+mkdir b
+cd b
+cmake -GNinja ..
+ninja
+ninja install
+
+or
+
 makdir b
 meson b
 cd b
@@ -48,6 +56,14 @@ cd b
 cmake ..
 make
 make install
+
+или: 
+
+mkdir b
+cd b
+cmake -GNinja ..
+ninja
+ninja install
 
 или же:
 
