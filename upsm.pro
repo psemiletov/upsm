@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-VERSION=2.0.1
+VERSION=2.1.0
 QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
