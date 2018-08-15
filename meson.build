@@ -20,3 +20,12 @@ q5exe = executable('upsm',
   cpp_args : '-std=c++11'
   )
 
+install_data(['icons/upsm.png'],
+             install_dir : 'share/icons/hicolor/128x128/apps')
+
+install_data(['icons/upsm.svg'],
+             install_dir : 'share/icons/hicolor/scalable/apps')
+
+install_data(['icons/upsm.svg'],
+             install_dir : 'share/applications')
+             

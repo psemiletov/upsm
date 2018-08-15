@@ -19,6 +19,15 @@ cmake ..
 make
 make install
 
+or
+
+makdir b
+meson b
+cd b
+ninja
+ninja install
+
+
 P.S. Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program.
 
 Peter Semiletov
@@ -39,6 +48,14 @@ cd b
 cmake ..
 make
 make install
+
+или же:
+
+makdir b
+meson b
+cd b
+ninja
+ninja install
 
 
 П.С. Кнопка "закрыть" завершает работу программы, а "свернуть" - сворачивает в область уведомлений.
