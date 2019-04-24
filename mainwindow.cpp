@@ -19,6 +19,8 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 #include <QDateTime>
 #include <QPainter>
 
+#include <iostream> 
+
 #include "mainwindow.h"
 
 
@@ -89,6 +91,14 @@ void MainWindow::show_at_center()
 }
 
 
+void MainWindow::changeEvent (QEvent *event)
+{
+  if (event->type() == QEvent::WindowStateChange)
+      if (isMinimized()) 
+          hide();
+}
+
+
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
   qtTranslator.load (QString ("qt_%1").arg (QLocale::system().name()),
@@ -110,7 +120,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   paint_rect = new QImage (64, 64, QImage::Format_ARGB32);
 
   tray_icon.setVisible (true);
-
 
   resize (800, 400);
   show_at_center();
@@ -162,14 +171,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   led_logsize->setText (settings->value ("logsize", "1024").toString());
   la_settings->addLayout (la_logsize);
 
-  cb_hide_from_taskbar = new QCheckBox (tr ("Hide from taskbar"));
-  cb_hide_from_taskbar->setTristate (false);
-
-  if (settings->value ("hide_from_taskbar", "0").toBool())
-      cb_hide_from_taskbar->setChecked (true);
-
-  la_settings->addWidget (cb_hide_from_taskbar);
-
   cb_run_minimized = new QCheckBox (tr ("Run minimized"));
   cb_run_minimized->setTristate (false);
 
@@ -217,14 +218,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   update_stats();
   
   timer->start (polltime);
-   
-  if (settings->value ("hide_from_taskbar", "0").toBool())
-      {
-       setWindowFlags (Qt::Tool);  
-       setAttribute (Qt::WA_QuitOnClose);
-      } 
-  else
-      setWindowFlags (Qt::Window);  
 }
 
 
@@ -240,15 +233,7 @@ void MainWindow::bt_apply_clicked()
 
   settings->setValue ("run_minimized", cb_run_minimized->isChecked());
   settings->setValue ("hide_from_taskbar", cb_hide_from_taskbar->isChecked());
-  
-  if (settings->value ("hide_from_taskbar", "0").toBool())
-      {
-       setWindowFlags (Qt::Tool);  
-       setAttribute (Qt::WA_QuitOnClose);
-      } 
-  else
-      setWindowFlags (Qt::Window);  
-  
+
   timer->stop();
   timer->start (polltime);
 }
@@ -341,10 +326,10 @@ void MainWindow::update_stats()
      
   pnt.setFont (fnt);
   pnt.setPen (Qt::cyan);
-  pnt.drawText(QRect (1, 1, 64, 32), Qt::AlignLeft, input_v.left (input_v.indexOf (".")));
+  pnt.drawText (QRect (1, 1, 64, 32), Qt::AlignLeft, input_v.left (input_v.indexOf (".")));
 
   pnt.setPen (Qt::white);
-  pnt.drawText(QRect (1, 32, 64, 32), Qt::AlignLeft, output_v.left (input_v.indexOf (".")));
+  pnt.drawText (QRect (1, 32, 64, 32), Qt::AlignLeft, output_v.left (input_v.indexOf (".")));
   
   QPixmap pm = QPixmap::fromImage (*paint_rect);
   tray_icon.setIcon (QIcon (pm));
@@ -356,7 +341,6 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
   switch (reason) 
          {
           case QSystemTrayIcon::Trigger:
-         // case QSystemTrayIcon::DoubleClick:
                   
           if (! isVisible())        
              {     

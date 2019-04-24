@@ -15,7 +15,7 @@ and the bus is = 003
 
 2. Copy, if not exists, file "some_number-nut-usbups.rules" from /lib/udev/rules.d to /etc/udev/rules.d.
 
-3. Edit file /etc/nut/ups.conf, and put there to the end something like this:
+3. Edit file /etc/ups/ups.conf, and put there to the end something like this:
 
 [myups]
     driver = usbhid-ups
@@ -28,19 +28,40 @@ and the bus is = 003
    pollfreq - the device polling frequency, in milliseconds.
    The bus is better to leave undefined, because the bus number can be changed after reboot,
 
-4. Run the driver:
+  4. Copy systemd service files (nut-driver.service, nut-monitor.service, nut-server.service) from nut source (/scripts/systemd), if not installed with the package, to /etc/systemd/system. To ensure that nut-server will run after the possible failure, add to nut-server.service file at the [Unit] section lines
 
+Restart=on-failure
+RestartSec=360s 
+
+  5. Run
+
+   systemctl enable nut-server 
+
+   ...to enable autostart nut-driver and nut-driver after the next boot.
+
+  6. Run
+
+   systemctl start nut-server 
+
+   ...to start it now.
+
+ /* Under the hood, for non-systemd systems:
+
+First you need to run the driver:
 upsdrvctl start
-
-5. Run the server:
-
+Then run the server:
 upsd
+*/  
 
-6. Read the data from UPS:
+7. Read the data from UPS:
 
 upsc myups
 
-7. Put this command to the "Command" parameter at upsm "Settings" panel.
+or, in the case of the nut built from the source:
+
+/usr/local/ups/bin/upsc myups@localhost
+
+8. Put this command to the "Command" parameter at upsm "Settings" panel.
 
 
 Peter Semiletov <peter.semiletov@gmail.com>

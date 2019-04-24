@@ -1,21 +1,13 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2017-06-30T11:27:20
-#
-#-------------------------------------------------
-
-VERSION=2.1.0
+VERSION=2.2.0
 QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 RESOURCES += upsm.qrc
 
-
 isEmpty(PREFIX) {
 PREFIX = /usr/local
 }
-
 
 TARGET = bin/upsm
 target.path = $$PREFIX/bin

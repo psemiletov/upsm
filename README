@@ -29,7 +29,7 @@ ninja install
 
 or
 
-makdir b
+mkdir b
 meson b
 cd b
 ninja

@@ -5,7 +5,7 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 add_definitions(${Qt5Widgets_DEFINITIONS})
 
 set(PROJECT "upsm")
-project ($PROJECT VERSION 2.1.1)
+project ($PROJECT VERSION 2.2.0)
 
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -23,7 +23,17 @@ endif()
 
 qt5_add_resources(QT_RESOURCES upsm.qrc)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -fuse-ld=gold")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS} -fuse-ld=gold")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+
+
+if (UNIX AND NOT APPLE)
+  execute_process(COMMAND ${CMAKE_C_COMPILER} -fuse-ld=gold -Wl,--version ERROR_QUIET OUTPUT_VARIABLE ld_version)
+  if ("${ld_version}" MATCHES "GNU gold")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold -Wl,--disable-new-dtags")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fuse-ld=gold -Wl,--disable-new-dtags")
+  endif()
+endif()
 
 # Populate a CMake variable with the sources
 set(upsm_SRCS

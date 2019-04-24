@@ -1,6 +1,6 @@
 project('upsm', 'cpp', 
          default_options : ['cpp_std=c++11'],
-         version : '2.1.1',
+         version : '2.2.0',
          license : 'GPLv3')
 
 
@@ -9,8 +9,7 @@ qt5 = import('qt5')
 
 
 processed = qt5.preprocess(
-  moc_headers : 'mainwindow.h',   # Only headers that need moc should be put here
-#  moc_sources : 'mainwindow.cpp', # must have #include"moc_helperFile.cpp"
+  moc_headers : 'mainwindow.h',   
   qresources  : 'upsm.qrc',
 )
 
@@ -27,6 +26,6 @@ install_data(['icons/upsm.png'],
 install_data(['icons/upsm.svg'],
              install_dir : 'share/icons/hicolor/scalable/apps')
 
-install_data(['icons/upsm.desktop'],
+install_data(['desktop/upsm.desktop'],
              install_dir : 'share/applications')
              

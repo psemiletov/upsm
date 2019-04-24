@@ -75,6 +75,7 @@ public slots:
 protected:
 
   void closeEvent (QCloseEvent *event);    
+  void changeEvent(QEvent *event);
 };
 
 #endif // MAINWINDOW_H
