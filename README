@@ -1,6 +1,6 @@
 #upsm
 Home: https://github.com/psemiletov/upsm
-Deps: Qt5
+Deps: Qt5 or Qt6
 
 EN: upsm
 

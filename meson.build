@@ -1,6 +1,6 @@
 project('upsm', 'cpp', 
          default_options : ['cpp_std=c++11'],
-         version : '2.2.0',
+         version : '3.0.0',
          license : 'GPLv3')
 
 

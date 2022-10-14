@@ -120,8 +120,12 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   QString lng = QLocale::system().name().left(2).toLower();
 
-  if (! file_exists (":/translations/" + lng + ".qm"))
+  qDebug() << lng;
+
+  if (! file_exists (":/translations/upsm_" + lng + ".qm"))
      lng = "en";
+
+  qDebug() << lng;
 
 #if QT_VERSION >= 0x060000
   if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath)))
@@ -131,7 +135,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
      qApp->installTranslator (&transl_system);
 #endif
 
-  if (transl_app.load (":/translations/" + lng))
+  if (transl_app.load (":/translations/upsm_" + lng))
       qApp->installTranslator (&transl_app);
 
 
