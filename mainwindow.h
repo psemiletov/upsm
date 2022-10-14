@@ -37,8 +37,8 @@ public:
     
   QTimer *timer; 
 
-  QTranslator myappTranslator;
-  QTranslator qtTranslator;
+  QTranslator transl_system;
+  QTranslator transl_app;
 
   QTabWidget main_widget;
 

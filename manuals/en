@@ -33,7 +33,25 @@ and the bus is = 003
 Restart=on-failure
 RestartSec=360s 
 
-  5. Run
+   5.
+
+Create (if not exists)
+/etc/udev/rules.d/50-ups.rules
+with following content:
+
+SUBSYSTEM=="usb", ATTR{idVendor}=="0d9f", ATTR{idProduct}=="0004", SYMLINK+="ups0", GROUP="nut"
+
+Where attributes for idVendor and idProduct lsusb are taken from lsubs output. This creates a persistent /dev/ups0 simlink (devices are initialized in random order, so we need a "static" name.
+
+  6. Open nut-server.service file (at /etc/systemd/<....>), at [Unit section] edit:
+
+[Unit]
+After=local-fs.target network-online.target nut-driver.service ups0.device
+
+   Thus, we ensure that nut-server.service will be started after ups0 is initialized on USB bus.
+
+
+  7. Run
 
    systemctl enable nut-server 
 
@@ -62,6 +80,12 @@ or, in the case of the nut built from the source:
 /usr/local/ups/bin/upsc myups@localhost
 
 8. Put this command to the "Command" parameter at upsm "Settings" panel.
+
+
+
+
+
+///////////////////
 
 
 Peter Semiletov <peter.semiletov@gmail.com>

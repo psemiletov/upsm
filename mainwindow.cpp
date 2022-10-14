@@ -4,7 +4,12 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 
 #include <QProcess>
 #include <QDebug>
+#if QT_VERSION < 0x060000
 #include <QDesktopWidget>
+#endif
+
+#include <QScreen>
+
 #include <QApplication>
 #include <QPixmap>
 #include <QDir>
@@ -65,7 +70,7 @@ QString hash_get_val (QHash<QString, QString> &h,
 }
 
 
-QString qstring_load (const QString &fileName, const char *enc)
+QString qstring_load (const QString &fileName)
 {
   QFile file (fileName);
 
@@ -73,7 +78,6 @@ QString qstring_load (const QString &fileName, const char *enc)
      return QString();
 
   QTextStream in (&file);
-  in.setCodec (enc);
 
   return in.readAll();
 }
@@ -81,13 +85,24 @@ QString qstring_load (const QString &fileName, const char *enc)
 
 void MainWindow::show_at_center()
 {
-  QDesktopWidget *desktop = QApplication::desktop();
+  /*QDesktopWidget *desktop = QApplication::desktop();
   
   int x = (desktop->width() - size().width()) / 2;
   int y = (desktop->height() - size().height()) / 2;
   y -= 50;
  
+  move (x, y);*/
+
+//    /*QDesktopWidget *desktop = QApplication::desktop();
+
+  QScreen *screen = qApp->screens()[0];
+
+  int x = (screen->size().width() - size().width()) / 2;
+  int y = (screen->size().height() - size().height()) / 2;
+  y -= 50;
+
   move (x, y);
+
 }
 
 
@@ -101,14 +116,26 @@ void MainWindow::changeEvent (QEvent *event)
 
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
-  qtTranslator.load (QString ("qt_%1").arg (QLocale::system().name()),
-                     QLibraryInfo::location (QLibraryInfo::TranslationsPath));
-       
-  qApp->installTranslator (&qtTranslator);
 
-  myappTranslator.load (":/translations/upsm_" + QLocale::system().name());
-  qApp->installTranslator (&myappTranslator);
-    
+
+  QString lng = QLocale::system().name().left(2).toLower();
+
+  if (! file_exists (":/translations/" + lng + ".qm"))
+     lng = "en";
+
+#if QT_VERSION >= 0x060000
+  if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath)))
+     qApp->installTranslator (&transl_app);
+#else
+  if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::location (QLibraryInfo::TranslationsPath)))
+     qApp->installTranslator (&transl_system);
+#endif
+
+  if (transl_app.load (":/translations/" + lng))
+      qApp->installTranslator (&transl_app);
+
+
+
   QDir dr;
   s_config_fname = dr.homePath() + "/.config/upsm.conf";
   settings = new QSettings (s_config_fname, QSettings::IniFormat);
@@ -207,7 +234,7 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
   if (! file_exists (filename))
       filename = ":/manuals/en";
   
-  help_widget->setPlainText (qstring_load (filename, "UTF-8"));
+  help_widget->setPlainText (qstring_load (filename));
   
   main_widget.addTab (help_widget, tr ("Help"));
   
@@ -245,8 +272,13 @@ void MainWindow::update_stats()
      return;
 
   QProcess procmon;
+
+#if QT_VERSION >= 0x060000
+  procmon.startCommand (command);
+#else
   procmon.start (command);
-    
+#endif
+
   if (! procmon.waitForStarted())
       return;
 
@@ -336,7 +368,7 @@ void MainWindow::update_stats()
 }
 
 
-void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+void MainWindow::iconActivated (QSystemTrayIcon::ActivationReason reason)
 {
   switch (reason) 
          {

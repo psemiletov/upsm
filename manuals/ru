@@ -60,6 +60,17 @@ upsc myups
 
 7. Прописываем эту строку в качестве команды опроса в Настройках upsm.
 
+8. Если upsc выдает "Driver not connected", надо всё же запустить драйвер вручную:
+
+upsdrvctl start
+
+Можно также: 
+
+upsdrvsvcctl resync
+и потом запускать upsdrvsvcctl start
+и останавливать upsdrvsvcctl stop
+
+
 
 Петр Семилетов <peter.semiletov@gmail.com>
 
