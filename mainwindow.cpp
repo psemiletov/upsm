@@ -259,7 +259,7 @@ void MainWindow::bt_apply_clicked()
   logsize = settings->value ("logsize", "1024").toInt();
 
   settings->setValue ("run_minimized", cb_run_minimized->isChecked());
-  settings->setValue ("hide_from_taskbar", cb_hide_from_taskbar->isChecked());
+  //settings->setValue ("hide_from_taskbar", cb_hide_from_taskbar->isChecked());
 
   timer->stop();
   timer->start (polltime);
