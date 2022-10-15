@@ -1,17 +1,15 @@
 #upsm
-Home: https://github.com/psemiletov/upsm
-Deps: Qt5 or Qt6
+Home > https://github.com/psemiletov/upsm
+Donate >
+PayPal: peter.semiletov@gmail.com
+BTC: 1PCo2zznEGMFJey4qFKGQ8CoFK2nzNnJJf
+Patreon: https://www.patreon.com/semiletov
+
 
 EN: upsm
 
    upsm is public domain, Qt-based ups monitor (front-end for upsc from Network UPS Tools). It sits at the tray and polls nut server using upsc, so you need to set up NUT first (ups.conf and other stuff). From the Settings of upsm you can define the command line for upsc (i.e. "upsc serverups@localhost" for example) and polling time period, in millisecond.
-   To compile and install upsm, do as root:
-
-qmake
-make
-make install
-
-or:
+   To compile and install upsm with Qt5 or Qt6, do as root:
 
 mkdir b
 cd b
@@ -26,6 +24,12 @@ cd b
 cmake -GNinja ..
 ninja
 ninja install
+
+The old ways, with Qt5 only:
+
+qmake
+make
+make install
 
 or
 
@@ -43,13 +47,7 @@ Peter Semiletov
 РУ:
 
    upsm это основанный на Qt монитор ИБП (фронт-энд к утилите upsc из состава Network UPS Tools). Он сидит в области уведомлений и запрашивает показания напряжения от nut-сервера используя upsc, поэтому вам нужно сначала настроить NUT (ups.conf и прочее). В Настройках upsm нужно задать команду вызова upsc, например "upsc serverups@localhost", и периодичность опроса сервера, в миллисекундах.
-   Для сборки и установки upsm выполните под рутом:
-
-qmake
-make
-make install
-
-либо:
+   Для сборки и установки upsm (сборка с Qt5 или Qt6) выполните под рутом:
 
 mkdir b
 cd b
@@ -57,7 +55,7 @@ cmake ..
 make
 make install
 
-или: 
+или:
 
 mkdir b
 cd b
@@ -65,7 +63,13 @@ cmake -GNinja ..
 ninja
 ninja install
 
-или же:
+Устаревший способ, только для Qt5:
+
+qmake
+make
+make install
+
+либо:
 
 makdir b
 meson b

@@ -4,12 +4,11 @@ This program by Peter Semiletov <peter.semiletov@gmail.com> is public domain
 
 #include <QProcess>
 #include <QDebug>
-#if QT_VERSION < 0x060000
-#include <QDesktopWidget>
-#endif
+//#if QT_VERSION < 0x060000
+//#include <QDesktopWidget>
+//#endif
 
 #include <QScreen>
-
 #include <QApplication>
 #include <QPixmap>
 #include <QDir>
@@ -102,7 +101,6 @@ void MainWindow::show_at_center()
   y -= 50;
 
   move (x, y);
-
 }
 
 
@@ -116,18 +114,12 @@ void MainWindow::changeEvent (QEvent *event)
 
 MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 {
-
-
   QString lng = QLocale::system().name().left(2).toLower();
 
-  qDebug() << lng;
-
-  if (! file_exists (":/translations/upsm_" + lng + ".qm"))
+   if (! file_exists (":/translations/upsm_" + lng + ".qm"))
      lng = "en";
 
-  qDebug() << lng;
-
-#if QT_VERSION >= 0x060000
+ #if QT_VERSION >= 0x060000
   if (transl_system.load (QString ("qt_%1").arg (lng), QLibraryInfo::path (QLibraryInfo::TranslationsPath)))
      qApp->installTranslator (&transl_app);
 #else
@@ -137,7 +129,6 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   if (transl_app.load (":/translations/upsm_" + lng))
       qApp->installTranslator (&transl_app);
-
 
 
   QDir dr;
@@ -172,9 +163,9 @@ MainWindow::MainWindow (QWidget *parent): QMainWindow (parent)
 
   
  
-  QWidget *settings_widget = new QWidget; 
+  QWidget *settings_widget = new QWidget;
   
-  QVBoxLayout *la_settings = new QVBoxLayout; 
+  QVBoxLayout *la_settings = new QVBoxLayout;
   settings_widget->setLayout (la_settings);
   
   QHBoxLayout *la_command = new QHBoxLayout; 

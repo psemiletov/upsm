@@ -4,7 +4,7 @@ https://github.com/psemiletov/upsm
    MANUAL
 
   upsm is public domain, Qt-based ups monitor (front-end for upsc from Network UPS Tools). It sits at the tray and polls nut server using upsc, so you need to set up NUT first (ups.conf and other stuff). From the Settings of upsm you can define the command line for upsc (i.e. "upsc myups" for example) and polling time period, in millisecond.
-   Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program, if the option "Hide from taskbar" is turned off. 
+   Use "minimize" button to minimize upsm to the tray. "Close" button just closes the program. 
    And now how to set up NUT server.
 
 1. Execute "lsusb" command to see the vendor id of your UPS, for example:
@@ -81,8 +81,15 @@ or, in the case of the nut built from the source:
 
 8. Put this command to the "Command" parameter at upsm "Settings" panel.
 
+9. If upsc show "Driver not connected", try to start driver manually:
 
+upsdrvctl start
 
+Also: 
+
+upsdrvsvcctl resync
+And then "upsdrvsvcctl start" to start and  
+"upsdrvsvcctl stop" to stop.
 
 
 ///////////////////
